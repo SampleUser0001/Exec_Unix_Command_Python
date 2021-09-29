@@ -1,61 +1,20 @@
-# Template Python on Docker
+# Exec unix command Python
 
-## 使い方
+Pythonでunixコマンドを実行する。
 
-1. Dockerfileのimageを変更する。
-2. 必要に応じてDockerfileにpipを書く。
-3. 必要に応じてdocker-compose.ymlを修正する。
-4. 下記実行。
-    ``` sh
-    docker-compose build
-    docker-compose up
-    ```
-
-### 起動引数を渡したい場合
-
-1. docker-compose.ymlのpython serviceの名前を変更する。
-2. 下記実行。
-    ``` sh
-    docker-compose build
-    docker-compose run ${サービス名} ${起動引数}
-    ```
-
-### 依存モジュールの取得
-
-コンテナ内で```pip freeze```を実行する。  
-ファイルは```app/requirements/requirements.txt```に出力される。
+## 実行
 
 ``` sh
 docker-compose build
-docker-compose -f docker-compose_getRequirements.yml up
+docker-compose up
 ```
 
-### 非Dockerコンテナ環境で実行する
+### 備考
 
-作成済みのプログラムのパスについては意識している（ファイルの読み書きを行おうとしたときに、パスや権限が存在しないみたいなことは発生しない）想定。  
-
-1. 事前に依存モジュールを取得する。
-    - 取得したファイルは何らかの方法で保存しておく。
-2. 実行環境でcloneする。
-3. ```pip install -r app/requirements/requirements.txt```
-4. ```start.sh```を必要に応じて修正する。
-    - ```python```コマンドを```python3```コマンドに修正
-5. ```app/config/log_config.json```を修正する。
-    - 下記の```filename```を修正する。
-    ``` json
-      "fileHandler": {
-        "class": "logging.FileHandler",
-        "level": "DEBUG",
-        "formatter": "simple",
-        "filename": "/opt/app/log/app.log"  
-      }
-    ```
-    - AWS CloudShellだったら…
-    ``` json
-        "filename": "/home/cloudshell-user/Template_Python_on_Docker/app/log/app.log"  
-    ```
+- 例として```npm search aws-sdk --json=true```からdescriptionを取得しているが、Dockerコンテナにnpmをインストールするのが面倒らしく、Pythonコンテナではなく、NodeコンテナにPythonをインストールしている。
 
 ## 参考
 
-- [Qiita:Docker を使う（python のイメージで色々確認してみる）](https://qiita.com/landwarrior/items/fd918da9ebae20486b81)
-- [Future Tech Blog:仕事でPythonコンテナをデプロイする人向けのDockerfile (1): オールマイティ編](https://future-architect.github.io/articles/20200513/)
+- [Pythonでコマンドを実行する方法を現役エンジニアが解説【初心者向け】:TechAcademy](https://techacademy.jp/magazine/22133)
+- [python3のbytes型とstr型の比較と変換方法:Python Snippets](https://python.civic-apps.com/python3-bytes-str-convert/)
+- [python3 文字列を辞書に変換:Qiita](https://qiita.com/lamplus/items/b5d8872c76757b2c0dd9)
